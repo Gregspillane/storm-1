@@ -20,6 +20,7 @@ args.output_dir/
 """
 
 import os
+import toml
 
 from argparse import ArgumentParser
 from knowledge_storm import STORMWikiRunnerArguments, STORMWikiRunner, STORMWikiLMConfigs
@@ -29,22 +30,23 @@ from knowledge_storm.utils import load_api_key
 
 
 def main(args):
-    load_api_key(toml_file_path='secrets.toml')
+    # Load configuration from secrets.toml
+    config = toml.load('secrets.toml')
     lm_configs = STORMWikiLMConfigs()
     openai_kwargs = {
-        'api_key': os.getenv("OPENAI_API_KEY"),
+        'api_key': config['openai']['api_key'],
         'temperature': 1.0,
         'top_p': 0.9,
     }
 
-    ModelClass = OpenAIModel if os.getenv('OPENAI_API_TYPE') == 'openai' else AzureOpenAIModel
+    ModelClass = OpenAIModel if config['openai']['api_type'] == 'openai' else AzureOpenAIModel
     # If you are using Azure service, make sure the model name matches your own deployed model name.
     # The default name here is only used for demonstration and may not match your case.
-    gpt_35_model_name = 'gpt-3.5-turbo' if os.getenv('OPENAI_API_TYPE') == 'openai' else 'gpt-35-turbo'
+    gpt_35_model_name = 'gpt-3.5-turbo' if config['openai']['api_type'] == 'openai' else 'gpt-35-turbo'
     gpt_4_model_name = 'gpt-4o'
-    if os.getenv('OPENAI_API_TYPE') == 'azure':
-        openai_kwargs['api_base'] = os.getenv('AZURE_API_BASE')
-        openai_kwargs['api_version'] = os.getenv('AZURE_API_VERSION')
+    if config['openai']['api_type'] == 'azure':
+        openai_kwargs['api_base'] = config['openai'].get('api_base', '')
+        openai_kwargs['api_version'] = config['openai']['api_version']
 
     # STORM is a LM system so different components can be powered by different models.
     # For a good balance between cost and quality, you can choose a cheaper/faster model for conv_simulator_lm

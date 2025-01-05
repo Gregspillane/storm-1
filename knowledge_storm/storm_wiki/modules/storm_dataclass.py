@@ -125,6 +125,11 @@ class StormInformationTable(InformationTable):
         selected_snippets = []
         if type(queries) is str:
             queries = [queries]
+            
+        # Return empty list if no snippets available
+        if len(self.collected_snippets) == 0:
+            return []
+            
         for query in queries:
             encoded_query = self.encoder.encode(query, show_progress_bar=False)
             sim = cosine_similarity([encoded_query], self.encoded_snippets)[0]
