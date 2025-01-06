@@ -17,6 +17,29 @@ STORM is a system that generates Wikipedia-like articles from scratch using larg
 
 ## Collaborative Version (Co-STORM)
 Co-STORM enhances STORM by enabling human-AI collaboration through:
-- A collaborative discourse protocol
-- Dynamic mind map for shared conceptual space
-- Turn management policy for smooth collaboration
+1. Interactive Discussion:
+   - You choose a topic (e.g., "The Origins of Country Music")
+   - AI experts gather information and start a discussion
+   - You participate by sharing insights or asking questions
+   - System responds intelligently to your input
+
+2. Real-World Example:
+   When discussing country music's evolution, you mentioned Beyoncé's country album, and the system:
+   - Acknowledged this current trend
+   - Connected it to broader genre-crossing patterns
+   - Engaged you with follow-up questions
+   - Used this information to enrich the discussion
+
+3. Knowledge Building:
+   - Creates a dynamic mind map of the topic
+   - Integrates your contributions with AI research
+   - Generates a comprehensive final report
+   - Maintains citations and references
+
+4. Benefits:
+   - Combines human expertise with AI research capabilities
+   - Creates more engaging and relevant content
+   - Adapts to your interests and knowledge
+   - Produces well-documented, cited articles
+
+The goal is to make research and article creation an interactive, collaborative process where your insights help shape the final output while maintaining academic rigor through citations and fact-checking.

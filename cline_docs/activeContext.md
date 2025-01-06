@@ -1,26 +1,43 @@
 # Active Context
 
 ## Current Activity
-- Setting up Cline's Memory Bank documentation
-- Initializing project documentation structure
-- Creating foundational documentation files
-- Supporting user's exploration of STORM capabilities
+- Helping user understand and use Co-STORM capabilities
+- Troubleshooting configuration issues
+- Explaining interactive conversation features
 
 ## Recent Changes
-- Created initial Memory Bank files:
-  - productContext.md
-  - techContext.md
-  - systemPatterns.md
-- Established cline_docs directory structure
-- Focused documentation on onboarding and experimentation
+- Fixed secrets.toml configuration:
+  - Added proper environment variable names
+  - Added ENCODER_API_TYPE setting
+- Successfully launched Co-STORM interactive session
+- Documented Co-STORM conversation workflow
+
+## How Co-STORM Works
+1. Initial Setup:
+   - User provides a topic of interest
+   - System performs warm start to gather background information
+   - AI moderator initiates discussion
+
+2. Interactive Conversation:
+   - Moderator guides discussion with questions and insights
+   - When prompted for "Your utterance", user can:
+     * Ask questions about the topic
+     * Share personal knowledge
+     * Guide discussion direction
+     * Respond to moderator's questions
+
+3. Output Generation:
+   - System collects and organizes information
+   - Generates comprehensive report
+   - Saves conversation history
 
 ## Next Steps
-1. Create quick start guide for experimentation
-2. Document basic usage patterns
-3. Add troubleshooting section for common setup issues
-4. Create example scenarios for testing
+1. Document common usage patterns
+2. Create example conversation scenarios
+3. Add troubleshooting section
+4. Expand configuration documentation
 
 ## Current Focus
-- Understanding STORM's capabilities through experimentation
-- Setting up local development environment
-- Exploring different configuration options
+- Understanding Co-STORM's interactive capabilities
+- Guiding users through conversation workflow
+- Improving documentation for better user experience

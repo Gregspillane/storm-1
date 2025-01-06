@@ -1,0 +1,645 @@
+{
+  "runner_argument": {
+    "topic": "Real life use cases for RAG",
+    "retrieve_top_k": 3,
+    "max_search_queries": 2,
+    "total_conv_turn": 20,
+    "max_search_thread": 5,
+    "max_search_queries_per_turn": 3,
+    "warmstart_max_num_experts": 3,
+    "warmstart_max_turn_per_experts": 2,
+    "warmstart_max_thread": 3,
+    "max_thread_num": 5,
+    "max_num_round_table_experts": 2,
+    "moderator_override_N_consecutive_answering_turn": 3,
+    "node_expansion_trigger_count": 10,
+    "disable_moderator": false,
+    "disable_multi_experts": false,
+    "rag_only_baseline_mode": false
+  },
+  "lm_config": {
+    "question_answering_lm": {
+      "temperature": 1.0,
+      "max_tokens": 1000,
+      "top_p": 0.9,
+      "frequency_penalty": 0,
+      "presence_penalty": 0,
+      "n": 1,
+      "model": "gpt-4o"
+    },
+    "discourse_manage_lm": {
+      "temperature": 1.0,
+      "max_tokens": 500,
+      "top_p": 0.9,
+      "frequency_penalty": 0,
+      "presence_penalty": 0,
+      "n": 1,
+      "model": "gpt-4o"
+    },
+    "utterance_polishing_lm": {
+      "temperature": 1.0,
+      "max_tokens": 2000,
+      "top_p": 0.9,
+      "frequency_penalty": 0,
+      "presence_penalty": 0,
+      "n": 1,
+      "model": "gpt-4o"
+    },
+    "warmstart_outline_gen_lm": {
+      "temperature": 1.0,
+      "max_tokens": 500,
+      "top_p": 0.9,
+      "frequency_penalty": 0,
+      "presence_penalty": 0,
+      "n": 1,
+      "model": "gpt-4o"
+    },
+    "question_asking_lm": {
+      "temperature": 1.0,
+      "max_tokens": 300,
+      "top_p": 0.9,
+      "frequency_penalty": 0,
+      "presence_penalty": 0,
+      "n": 1,
+      "model": "gpt-4o"
+    },
+    "knowledge_base_lm": {
+      "temperature": 1.0,
+      "max_tokens": 1000,
+      "top_p": 0.9,
+      "frequency_penalty": 0,
+      "presence_penalty": 0,
+      "n": 1,
+      "model": "gpt-4o"
+    }
+  },
+  "conversation_history": [
+    {
+      "utterance": "Sorry, there is insufficient information to answer the question.",
+      "raw_utterance": "Sorry, there is insufficient information to answer the question.",
+      "role": "Default Background Researcher",
+      "role_description": "",
+      "queries": [
+        "Real life use cases for RetrievalAugmented Generation",
+        "Applications of RAG in industry"
+      ],
+      "utterance_type": "Questioning",
+      "claim_to_make": "Background information about Real life use cases for RAG",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "Sorry, there is insufficient information to answer the question.",
+      "raw_utterance": "Sorry, there is insufficient information to answer the question.",
+      "role": "Industry Practitioner",
+      "role_description": " A professional from the healthcare sector who has implemented RAG models to improve patient data retrieval and streamline diagnostic processes, offering insights into practical applications and challenges in a real-world setting.",
+      "queries": [
+        "real world examples of RAG models in healthcare",
+        "RAG models healthcare efficiency improvement"
+      ],
+      "utterance_type": "Support",
+      "claim_to_make": "Can you share a specific example of how RAG models have improved efficiency or outcomes in a healthcare setting?",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "Sorry, there is insufficient information to answer the question.",
+      "raw_utterance": "Sorry, there is insufficient information to answer the question.",
+      "role": "AI Researcher",
+      "role_description": " An expert in AI and machine learning technologies, focusing on how Retrieval-Augmented Generation (RAG) models can be applied to enhance search engine results and knowledge management systems in various industries.",
+      "queries": [
+        "RAG models in knowledge management systems",
+        "transforming knowledge management with RAG models"
+      ],
+      "utterance_type": "Support",
+      "claim_to_make": "How do you envision RAG models transforming knowledge management systems, particularly in industries that rely heavily on vast and diverse data sets?",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "Sorry, there is insufficient information to answer the question.",
+      "raw_utterance": "Sorry, there is insufficient information to answer the question.",
+      "role": "Ethics and Policy Analyst",
+      "role_description": " A specialist in AI ethics and policy, discussing the implications of using RAG models in terms of privacy, data security, and potential biases, as well as suggesting frameworks for responsible deployment.",
+      "queries": [
+        "Ethical considerations for implementing RAG models",
+        "Policy frameworks for responsible use of RAG technology"
+      ],
+      "utterance_type": "Support",
+      "claim_to_make": "What are some key ethical considerations and policy frameworks that organizations should prioritize when implementing RAG models to ensure responsible and fair use?",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "Sorry, there is insufficient information to answer the question.",
+      "raw_utterance": "Sorry, there is insufficient information to answer the question.",
+      "role": "Industry Practitioner",
+      "role_description": " A professional from the healthcare sector who has implemented RAG models to improve patient data retrieval and streamline diagnostic processes, offering insights into practical applications and challenges in a real-world setting.",
+      "queries": [
+        "challenges of implementing RAG models in healthcare",
+        "overcoming RAG model implementation issues in healthcare"
+      ],
+      "utterance_type": "Support",
+      "claim_to_make": "What specific challenges did you encounter while implementing RAG models in your healthcare practice, and how did you overcome them?",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "Sorry, there is insufficient information to answer the question.",
+      "raw_utterance": "Sorry, there is insufficient information to answer the question.",
+      "role": "AI Researcher",
+      "role_description": " An expert in AI and machine learning technologies, focusing on how Retrieval-Augmented Generation (RAG) models can be applied to enhance search engine results and knowledge management systems in various industries.",
+      "queries": [
+        "Technical challenges of implementing RAG models in search engines",
+        "Overcoming obstacles in RAG model deployment for search engines"
+      ],
+      "utterance_type": "Support",
+      "claim_to_make": "What are some of the technical challenges in implementing RAG models for enhancing search engine results, and how can these challenges be overcome?",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "Sorry, there is insufficient information to answer the question.",
+      "raw_utterance": "Sorry, there is insufficient information to answer the question.",
+      "role": "Ethics and Policy Analyst",
+      "role_description": " A specialist in AI ethics and policy, discussing the implications of using RAG models in terms of privacy, data security, and potential biases, as well as suggesting frameworks for responsible deployment.",
+      "queries": [
+        "Mitigating biases in RetrievalAugmented Generation models",
+        "Transparency in RAG models and systems"
+      ],
+      "utterance_type": "Support",
+      "claim_to_make": "What measures can organizations implement to mitigate biases in RAG models, and how can they ensure these systems remain transparent and accountable to users?",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "That's a good point about the information gap. Building on that, how might Retrieval-Augmented Generation (RAG) help bridge such gaps in environmental sustainability? Specifically, how could it be used to improve resource management and generate actionable insights for climate change mitigation? [1][2]",
+      "raw_utterance": "How can Retrieval-Augmented Generation (RAG) be applied to enhance environmental sustainability efforts, such as improving resource management and generating actionable insights for climate change mitigation? [1][2]",
+      "role": "Moderator",
+      "role_description": "",
+      "queries": [],
+      "utterance_type": "Original Question",
+      "claim_to_make": "",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "I think the two biggest advantages of RAG is the ability to provide real time data to an LLM and to use a RAG system as a system of truth forcing all LLMs to only provide information that can be cited and validated by the LLM.",
+      "raw_utterance": "I think the two biggest advantages of RAG is the ability to provide real time data to an LLM and to use a RAG system as a system of truth forcing all LLMs to only provide information that can be cited and validated by the LLM.",
+      "role": "Guest",
+      "role_description": "",
+      "queries": [],
+      "utterance_type": "Original Question",
+      "claim_to_make": "",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "It sounds like you're highlighting some key benefits of RAG. Could you elaborate a bit on what you mean by using RAG as a \"system of truth\"? How does it ensure that information is both cited and validated?",
+      "raw_utterance": "Sorry, there is insufficient information to answer the question.",
+      "role": "General Knowledge Provider",
+      "role_description": " Focus on broadly covering the basic facts about the question.",
+      "queries": [
+        "realtime data integration with LLM using RAG",
+        "RAG systems as a source of truth for LLMs"
+      ],
+      "utterance_type": "Potential Answer",
+      "claim_to_make": "I think the two biggest advantages of RAG is the ability to provide real time data to an LLM and to use a RAG system as a system of truth forcing all LLMs to only provide information that can be cited and validated by the LLM.",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "The LLM can't haulucinate as it can only provide information as fact if its able to cite the source in the RAG system.",
+      "raw_utterance": "The LLM can't haulucinate as it can only provide information as fact if its able to cite the source in the RAG system.",
+      "role": "Guest",
+      "role_description": "",
+      "queries": [],
+      "utterance_type": "Original Question",
+      "claim_to_make": "",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "It's interesting to note that while LLMs aim to minimize hallucinations by providing cited information, they can still occasionally present information without citations if the retrieval system doesn't supply the necessary sources.",
+      "raw_utterance": "Sorry, there is insufficient information to answer the question.",
+      "role": "General Knowledge Provider",
+      "role_description": " Focus on broadly covering the basic facts about the question.",
+      "queries": [
+        "RAG system LLM source citation",
+        "LLM hallucination prevention in RAG"
+      ],
+      "utterance_type": "Potential Answer",
+      "claim_to_make": "The LLM can't haulucinate as it can only provide information as fact if its able to cite the source in the RAG system.",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "That's true. You can try to minimize this by instructing the LLM to be honest and open if it can't find a source. So it will either not answer the question or at least acknowledge that it might be wrong.",
+      "raw_utterance": "That's true. You can try to minimize this by instructing the LLM to be honest and open if it can't find a source. So it will either not answer the question or at least acknowledge that it might be wrong.",
+      "role": "Guest",
+      "role_description": "",
+      "queries": [],
+      "utterance_type": "Original Question",
+      "claim_to_make": "",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "Absolutely, and by doing so, the LLM can say something like, \"Sorry, there isn't enough information to answer that right now,\" which helps maintain transparency and trustworthiness.",
+      "raw_utterance": "Sorry, there is insufficient information to answer the question.",
+      "role": "General Knowledge Provider",
+      "role_description": " Focus on broadly covering the basic facts about the question.",
+      "queries": [
+        "How to instruct LLMs to acknowledge when a source cannot be found",
+        "Techniques to improve LLM honesty and openness in responses"
+      ],
+      "utterance_type": "Potential Answer",
+      "claim_to_make": "That's true. You can try to minimize this by instructing the LLM to be honest and open if it can't find a source. So it will either not answer the question or at least acknowledge that it might be wrong.",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "correct",
+      "raw_utterance": "correct",
+      "role": "Guest",
+      "role_description": "",
+      "queries": [],
+      "utterance_type": "Original Question",
+      "claim_to_make": "",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "I'm not sure there's enough information to fully answer that, but I'm happy to help if you can provide a bit more detail!",
+      "raw_utterance": "Sorry, there is insufficient information to answer the question.",
+      "role": "General Knowledge Provider",
+      "role_description": " Focus on broadly covering the basic facts about the question.",
+      "queries": [
+        "real life use cases for RetrievalAugmented Generation (RAG)",
+        "examples of RAG in practical applications"
+      ],
+      "utterance_type": "Potential Answer",
+      "claim_to_make": "correct",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "Could you elaborate on how RAG systems are being blended with existing AI models across different industries to boost their capabilities?",
+      "raw_utterance": "Could you provide more details on how RAG systems can be integrated with existing AI models in various industries to enhance their functionalities?",
+      "role": "AI Researcher",
+      "role_description": " An AI researcher specializing in retrieval-augmented generation. This speaker can provide insights into the technical aspects and potential of RAG, focusing on how the technology works and its advantages over traditional AI models.",
+      "queries": [],
+      "utterance_type": "Information Request",
+      "claim_to_make": "",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "I look at LLMs as sort of the brain. They have a lot of capability and internal knowledge, but they don't know a lot of propreitary things or are not able to stay up on recent events. So the obvious use case is an internal knowledge base. RAG allows an LLM to become an expert in a company. It can know the companies products, customers, values, etc. This is not possible without RAG",
+      "raw_utterance": "I look at LLMs as sort of the brain. They have a lot of capability and internal knowledge, but they don't know a lot of propreitary things or are not able to stay up on recent events. So the obvious use case is an internal knowledge base. RAG allows an LLM to become an expert in a company. It can know the companies products, customers, values, etc. This is not possible without RAG",
+      "role": "Guest",
+      "role_description": "",
+      "queries": [],
+      "utterance_type": "Original Question",
+      "claim_to_make": "",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "I see where you're coming from. RAG, or Retrieval-Augmented Generation, indeed bridges that gap by letting LLMs tap into specific internal databases to access up-to-date proprietary information. This makes them highly adaptable within a company's ecosystem, enabling them to provide insights on products, customer data, and values that are otherwise outside their initial training scope. It's like giving them a real-time feed of the company's inner workings, wouldn't you say?",
+      "raw_utterance": "Sorry, there is insufficient information to answer the question.",
+      "role": "General Knowledge Provider",
+      "role_description": " Focus on broadly covering the basic facts about the question.",
+      "queries": [
+        "real life use cases for RAG in companies",
+        "how RAG enhances LLM capabilities with proprietary information"
+      ],
+      "utterance_type": "Potential Answer",
+      "claim_to_make": "I look at LLMs as sort of the brain. They have a lot of capability and internal knowledge, but they don't know a lot of propreitary things or are not able to stay up on recent events. So the obvious use case is an internal knowledge base. RAG allows an LLM to become an expert in a company. It can know the companies products, customers, values, etc. This is not possible without RAG",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "I would say. Its what allows an LLM to act as a sales agent, or a marketing agent or a custom support agent. You can provide an LLM with all of the necessary company information for the LLM to answer questions accuratly",
+      "raw_utterance": "I would say. Its what allows an LLM to act as a sales agent, or a marketing agent or a custom support agent. You can provide an LLM with all of the necessary company information for the LLM to answer questions accuratly",
+      "role": "Guest",
+      "role_description": "",
+      "queries": [],
+      "utterance_type": "Original Question",
+      "claim_to_make": "",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "It seems like there might be a bit of context missing here. Could you clarify what specific information you're looking for about how LLMs are used in these roles? That way, I can provide a more tailored response!",
+      "raw_utterance": "Sorry, there is insufficient information to answer the question.",
+      "role": "General Knowledge Provider",
+      "role_description": " Focus on broadly covering the basic facts about the question.",
+      "queries": [
+        "RAG use cases in sales and marketing",
+        "How LLMs use RAG for customer support"
+      ],
+      "utterance_type": "Potential Answer",
+      "claim_to_make": "I would say. Its what allows an LLM to act as a sales agent, or a marketing agent or a custom support agent. You can provide an LLM with all of the necessary company information for the LLM to answer questions accuratly",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    }
+  ],
+  "warmstart_conv_archive": [
+    {
+      "utterance": "Sorry, there is insufficient information to answer the question.",
+      "raw_utterance": "Sorry, there is insufficient information to answer the question.",
+      "role": "Default Background Researcher",
+      "role_description": "",
+      "queries": [
+        "Real life use cases for RetrievalAugmented Generation",
+        "Applications of RAG in industry"
+      ],
+      "utterance_type": "Questioning",
+      "claim_to_make": "Background information about Real life use cases for RAG",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "Sorry, there is insufficient information to answer the question.",
+      "raw_utterance": "Sorry, there is insufficient information to answer the question.",
+      "role": "Industry Practitioner",
+      "role_description": " A professional from the healthcare sector who has implemented RAG models to improve patient data retrieval and streamline diagnostic processes, offering insights into practical applications and challenges in a real-world setting.",
+      "queries": [
+        "real world examples of RAG models in healthcare",
+        "RAG models healthcare efficiency improvement"
+      ],
+      "utterance_type": "Support",
+      "claim_to_make": "Can you share a specific example of how RAG models have improved efficiency or outcomes in a healthcare setting?",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "Sorry, there is insufficient information to answer the question.",
+      "raw_utterance": "Sorry, there is insufficient information to answer the question.",
+      "role": "AI Researcher",
+      "role_description": " An expert in AI and machine learning technologies, focusing on how Retrieval-Augmented Generation (RAG) models can be applied to enhance search engine results and knowledge management systems in various industries.",
+      "queries": [
+        "RAG models in knowledge management systems",
+        "transforming knowledge management with RAG models"
+      ],
+      "utterance_type": "Support",
+      "claim_to_make": "How do you envision RAG models transforming knowledge management systems, particularly in industries that rely heavily on vast and diverse data sets?",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "Sorry, there is insufficient information to answer the question.",
+      "raw_utterance": "Sorry, there is insufficient information to answer the question.",
+      "role": "Ethics and Policy Analyst",
+      "role_description": " A specialist in AI ethics and policy, discussing the implications of using RAG models in terms of privacy, data security, and potential biases, as well as suggesting frameworks for responsible deployment.",
+      "queries": [
+        "Ethical considerations for implementing RAG models",
+        "Policy frameworks for responsible use of RAG technology"
+      ],
+      "utterance_type": "Support",
+      "claim_to_make": "What are some key ethical considerations and policy frameworks that organizations should prioritize when implementing RAG models to ensure responsible and fair use?",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "Sorry, there is insufficient information to answer the question.",
+      "raw_utterance": "Sorry, there is insufficient information to answer the question.",
+      "role": "Industry Practitioner",
+      "role_description": " A professional from the healthcare sector who has implemented RAG models to improve patient data retrieval and streamline diagnostic processes, offering insights into practical applications and challenges in a real-world setting.",
+      "queries": [
+        "challenges of implementing RAG models in healthcare",
+        "overcoming RAG model implementation issues in healthcare"
+      ],
+      "utterance_type": "Support",
+      "claim_to_make": "What specific challenges did you encounter while implementing RAG models in your healthcare practice, and how did you overcome them?",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "Sorry, there is insufficient information to answer the question.",
+      "raw_utterance": "Sorry, there is insufficient information to answer the question.",
+      "role": "AI Researcher",
+      "role_description": " An expert in AI and machine learning technologies, focusing on how Retrieval-Augmented Generation (RAG) models can be applied to enhance search engine results and knowledge management systems in various industries.",
+      "queries": [
+        "Technical challenges of implementing RAG models in search engines",
+        "Overcoming obstacles in RAG model deployment for search engines"
+      ],
+      "utterance_type": "Support",
+      "claim_to_make": "What are some of the technical challenges in implementing RAG models for enhancing search engine results, and how can these challenges be overcome?",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "Sorry, there is insufficient information to answer the question.",
+      "raw_utterance": "Sorry, there is insufficient information to answer the question.",
+      "role": "Ethics and Policy Analyst",
+      "role_description": " A specialist in AI ethics and policy, discussing the implications of using RAG models in terms of privacy, data security, and potential biases, as well as suggesting frameworks for responsible deployment.",
+      "queries": [
+        "Mitigating biases in RetrievalAugmented Generation models",
+        "Transparency in RAG models and systems"
+      ],
+      "utterance_type": "Support",
+      "claim_to_make": "What measures can organizations implement to mitigate biases in RAG models, and how can they ensure these systems remain transparent and accountable to users?",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "That's a good point about the information gap. Building on that, how might Retrieval-Augmented Generation (RAG) help bridge such gaps in environmental sustainability? Specifically, how could it be used to improve resource management and generate actionable insights for climate change mitigation? [1][2]",
+      "raw_utterance": "How can Retrieval-Augmented Generation (RAG) be applied to enhance environmental sustainability efforts, such as improving resource management and generating actionable insights for climate change mitigation? [1][2]",
+      "role": "Moderator",
+      "role_description": "",
+      "queries": [],
+      "utterance_type": "Original Question",
+      "claim_to_make": "",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "I think the two biggest advantages of RAG is the ability to provide real time data to an LLM and to use a RAG system as a system of truth forcing all LLMs to only provide information that can be cited and validated by the LLM.",
+      "raw_utterance": "I think the two biggest advantages of RAG is the ability to provide real time data to an LLM and to use a RAG system as a system of truth forcing all LLMs to only provide information that can be cited and validated by the LLM.",
+      "role": "Guest",
+      "role_description": "",
+      "queries": [],
+      "utterance_type": "Original Question",
+      "claim_to_make": "",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "It sounds like you're highlighting some key benefits of RAG. Could you elaborate a bit on what you mean by using RAG as a \"system of truth\"? How does it ensure that information is both cited and validated?",
+      "raw_utterance": "Sorry, there is insufficient information to answer the question.",
+      "role": "General Knowledge Provider",
+      "role_description": " Focus on broadly covering the basic facts about the question.",
+      "queries": [
+        "realtime data integration with LLM using RAG",
+        "RAG systems as a source of truth for LLMs"
+      ],
+      "utterance_type": "Potential Answer",
+      "claim_to_make": "I think the two biggest advantages of RAG is the ability to provide real time data to an LLM and to use a RAG system as a system of truth forcing all LLMs to only provide information that can be cited and validated by the LLM.",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "The LLM can't haulucinate as it can only provide information as fact if its able to cite the source in the RAG system.",
+      "raw_utterance": "The LLM can't haulucinate as it can only provide information as fact if its able to cite the source in the RAG system.",
+      "role": "Guest",
+      "role_description": "",
+      "queries": [],
+      "utterance_type": "Original Question",
+      "claim_to_make": "",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "It's interesting to note that while LLMs aim to minimize hallucinations by providing cited information, they can still occasionally present information without citations if the retrieval system doesn't supply the necessary sources.",
+      "raw_utterance": "Sorry, there is insufficient information to answer the question.",
+      "role": "General Knowledge Provider",
+      "role_description": " Focus on broadly covering the basic facts about the question.",
+      "queries": [
+        "RAG system LLM source citation",
+        "LLM hallucination prevention in RAG"
+      ],
+      "utterance_type": "Potential Answer",
+      "claim_to_make": "The LLM can't haulucinate as it can only provide information as fact if its able to cite the source in the RAG system.",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "That's true. You can try to minimize this by instructing the LLM to be honest and open if it can't find a source. So it will either not answer the question or at least acknowledge that it might be wrong.",
+      "raw_utterance": "That's true. You can try to minimize this by instructing the LLM to be honest and open if it can't find a source. So it will either not answer the question or at least acknowledge that it might be wrong.",
+      "role": "Guest",
+      "role_description": "",
+      "queries": [],
+      "utterance_type": "Original Question",
+      "claim_to_make": "",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "Absolutely, and by doing so, the LLM can say something like, \"Sorry, there isn't enough information to answer that right now,\" which helps maintain transparency and trustworthiness.",
+      "raw_utterance": "Sorry, there is insufficient information to answer the question.",
+      "role": "General Knowledge Provider",
+      "role_description": " Focus on broadly covering the basic facts about the question.",
+      "queries": [
+        "How to instruct LLMs to acknowledge when a source cannot be found",
+        "Techniques to improve LLM honesty and openness in responses"
+      ],
+      "utterance_type": "Potential Answer",
+      "claim_to_make": "That's true. You can try to minimize this by instructing the LLM to be honest and open if it can't find a source. So it will either not answer the question or at least acknowledge that it might be wrong.",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "correct",
+      "raw_utterance": "correct",
+      "role": "Guest",
+      "role_description": "",
+      "queries": [],
+      "utterance_type": "Original Question",
+      "claim_to_make": "",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "I'm not sure there's enough information to fully answer that, but I'm happy to help if you can provide a bit more detail!",
+      "raw_utterance": "Sorry, there is insufficient information to answer the question.",
+      "role": "General Knowledge Provider",
+      "role_description": " Focus on broadly covering the basic facts about the question.",
+      "queries": [
+        "real life use cases for RetrievalAugmented Generation (RAG)",
+        "examples of RAG in practical applications"
+      ],
+      "utterance_type": "Potential Answer",
+      "claim_to_make": "correct",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "Could you elaborate on how RAG systems are being blended with existing AI models across different industries to boost their capabilities?",
+      "raw_utterance": "Could you provide more details on how RAG systems can be integrated with existing AI models in various industries to enhance their functionalities?",
+      "role": "AI Researcher",
+      "role_description": " An AI researcher specializing in retrieval-augmented generation. This speaker can provide insights into the technical aspects and potential of RAG, focusing on how the technology works and its advantages over traditional AI models.",
+      "queries": [],
+      "utterance_type": "Information Request",
+      "claim_to_make": "",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "I look at LLMs as sort of the brain. They have a lot of capability and internal knowledge, but they don't know a lot of propreitary things or are not able to stay up on recent events. So the obvious use case is an internal knowledge base. RAG allows an LLM to become an expert in a company. It can know the companies products, customers, values, etc. This is not possible without RAG",
+      "raw_utterance": "I look at LLMs as sort of the brain. They have a lot of capability and internal knowledge, but they don't know a lot of propreitary things or are not able to stay up on recent events. So the obvious use case is an internal knowledge base. RAG allows an LLM to become an expert in a company. It can know the companies products, customers, values, etc. This is not possible without RAG",
+      "role": "Guest",
+      "role_description": "",
+      "queries": [],
+      "utterance_type": "Original Question",
+      "claim_to_make": "",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "I see where you're coming from. RAG, or Retrieval-Augmented Generation, indeed bridges that gap by letting LLMs tap into specific internal databases to access up-to-date proprietary information. This makes them highly adaptable within a company's ecosystem, enabling them to provide insights on products, customer data, and values that are otherwise outside their initial training scope. It's like giving them a real-time feed of the company's inner workings, wouldn't you say?",
+      "raw_utterance": "Sorry, there is insufficient information to answer the question.",
+      "role": "General Knowledge Provider",
+      "role_description": " Focus on broadly covering the basic facts about the question.",
+      "queries": [
+        "real life use cases for RAG in companies",
+        "how RAG enhances LLM capabilities with proprietary information"
+      ],
+      "utterance_type": "Potential Answer",
+      "claim_to_make": "I look at LLMs as sort of the brain. They have a lot of capability and internal knowledge, but they don't know a lot of propreitary things or are not able to stay up on recent events. So the obvious use case is an internal knowledge base. RAG allows an LLM to become an expert in a company. It can know the companies products, customers, values, etc. This is not possible without RAG",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "I would say. Its what allows an LLM to act as a sales agent, or a marketing agent or a custom support agent. You can provide an LLM with all of the necessary company information for the LLM to answer questions accuratly",
+      "raw_utterance": "I would say. Its what allows an LLM to act as a sales agent, or a marketing agent or a custom support agent. You can provide an LLM with all of the necessary company information for the LLM to answer questions accuratly",
+      "role": "Guest",
+      "role_description": "",
+      "queries": [],
+      "utterance_type": "Original Question",
+      "claim_to_make": "",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    },
+    {
+      "utterance": "It seems like there might be a bit of context missing here. Could you clarify what specific information you're looking for about how LLMs are used in these roles? That way, I can provide a more tailored response!",
+      "raw_utterance": "Sorry, there is insufficient information to answer the question.",
+      "role": "General Knowledge Provider",
+      "role_description": " Focus on broadly covering the basic facts about the question.",
+      "queries": [
+        "RAG use cases in sales and marketing",
+        "How LLMs use RAG for customer support"
+      ],
+      "utterance_type": "Potential Answer",
+      "claim_to_make": "I would say. Its what allows an LLM to act as a sales agent, or a marketing agent or a custom support agent. You can provide an LLM with all of the necessary company information for the LLM to answer questions accuratly",
+      "raw_retrieved_info": [],
+      "cited_info": null
+    }
+  ],
+  "experts": [
+    {
+      "topic": "Real life use cases for RAG",
+      "role_name": "AI Developer/Engineer",
+      "role_description": "An expert in Retrieval-Augmented Generation (RAG) and Language Learning Models (LLMs) who can provide technical insights into how these technologies are implemented to enhance the capabilities of AI systems in roles such as sales or customer support. They will focus on the technical architecture and the integration process of RAG in real-world applications."
+    },
+    {
+      "topic": "Real life use cases for RAG",
+      "role_name": "Business Strategy Consultant",
+      "role_description": "A professional who advises companies on leveraging AI technologies to optimize business processes. They can discuss the impact of LLMs acting as sales or marketing agents on business outcomes, such as improving customer engagement, efficiency, and scalability, while also addressing potential challenges and opportunities."
+    }
+  ],
+  "knowledge_base": {
+    "topic": "Real life use cases for RAG",
+    "tree": {
+      "name": "root",
+      "content": [],
+      "children": [],
+      "parent": null,
+      "synthesize_output": null,
+      "need_regenerate_synthesize_output": true
+    },
+    "info_uuid_to_info_dict": {},
+    "info_hash_to_uuid_dict": {}
+  }
+}
