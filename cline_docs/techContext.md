@@ -1,62 +1,37 @@
 # Technical Context
 
-## Core Technologies
-- Python 3.10+
-- DSPy framework for modular LLM pipelines
-- LangChain for LLM orchestration
-- Streamlit for web interface
-- FastAPI for backend services
-- PostgreSQL for data storage
-- Redis for caching
+## RAG Integration Details
 
-## Language Models
-- OpenAI GPT models
-- Anthropic Claude models
-- Google Gemini models
-- Local LLMs via Ollama
-- Support for custom model integrations
+### Configuration Parameters
+- RAG_API_KEY: API key for RAG service
+- RAG_API_URL: Base URL for RAG API
+- RAG_RETRIEVER_SIMILARITY_TOP_K: Number of top results to return
+- RAG_RETRIEVER_ALPHA: Weighting between dense/sparse search
+- RAG_RETRIEVER_RERANKING_ENABLED: Enable/disable reranking
+- RAG_RETRIEVER_RERANKING_TOP_N: Number of results to rerank
+- RAG_RETRIEVER_RERANKING_THRESHOLD: Reranking confidence threshold
+- RAG_RETRIEVER_MAX_RETRIES: Maximum retry attempts
+- RAG_RETRIEVER_BASE_DELAY: Base delay between retries
+- RAG_RETRIEVER_PRIORITY_THRESHOLD: Confidence threshold for RAG results
 
-## Search/Retrieval Modules
-- Serper API for web search
-- SerpAPI for search results
-- Vector-based retrieval modules
-- RAG API for hybrid retrieval
-  - Authentication via API key in secrets.toml
-  - Requires requests library
-  - Configuration parameters:
-    * alpha: dense/sparse search balance
-    * topK: number of results to return
-    * rerank: enable/disable result reranking
-  - Rate limit handling with exponential backoff
-  - Fallback to standard retrieval on API errors
-- Custom search engine integrations
+### Implementation Details
+- Uses requests.Session for connection pooling
+- Implements exponential backoff for rate limiting
+- Converts raw API results to Information objects
+- Handles both single and multiple queries
+- Supports URL exclusion
+- Provides comprehensive logging
 
-## Key Frameworks
-- Pydantic for data validation
-- SQLAlchemy for database ORM
-- Alembic for database migrations
-- Poetry for dependency management
-- Pytest for testing
-- Black and Flake8 for code quality
+### Error Handling
+- Handles rate limits with exponential backoff
+- Falls back to web search on RAG failure
+- Logs all errors with context
+- Validates API responses
+- Implements timeout handling
 
-## Infrastructure
-- Docker for containerization
-- Kubernetes for orchestration
-- Prometheus for monitoring
-- Grafana for visualization
-- GitHub Actions for CI/CD
-- AWS/GCP for cloud hosting
-
-## Data Flow
-1. Topic input through web interface
-2. Initial research via search/retrieval modules
-3. Outline generation using LLMs
-4. Article generation with citations
-5. Article polishing and formatting
-6. Output storage and presentation
-
-## Integration Points
-- REST APIs for external integrations
-- Webhook support for notifications
-- Plugin architecture for custom modules
-- API documentation via Swagger UI
+### Performance Considerations
+- Connection pooling for API calls
+- Batch processing of multiple queries
+- Caching of frequent queries
+- Asynchronous processing where possible
+- Monitoring of API response times

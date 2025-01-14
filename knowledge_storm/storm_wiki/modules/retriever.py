@@ -1,353 +1,242 @@
-from typing import Union, List, Dict, Optional
-from urllib.parse import urlparse
+import os
 import time
 import requests
-import dspy
+import logging
+from typing import List, Dict, Optional, Union, Any
+from dataclasses import dataclass
+from dotenv import load_dotenv
+from knowledge_storm.interface import Retriever, Information
 
-from ...interface import Retriever, Information
-from ...utils import ArticleTextProcessing
+logger = logging.getLogger(__name__)
 
-# Internet source restrictions according to Wikipedia standard:
-# https://en.wikipedia.org/wiki/Wikipedia:Reliable_sources/Perennial_sources
-GENERALLY_UNRELIABLE = {
-    "112_Ukraine",
-    "Ad_Fontes_Media",
-    "AlterNet",
-    "Amazon",
-    "Anadolu_Agency_(controversial_topics)",
-    "Ancestry.com",
-    "Answers.com",
-    "Antiwar.com",
-    "Anti-Defamation_League",
-    "arXiv",
-    "Atlas_Obscura_places",
-    "Bild",
-    "Blaze_Media",
-    "Blogger",
-    "BroadwayWorld",
-    "California_Globe",
-    "The_Canary",
-    "CelebrityNetWorth",
-    "CESNUR",
-    "ChatGPT",
-    "CNET_(November_2022\u2013present)",
-    "CoinDesk",
-    "Consortium_News",
-    "CounterPunch",
-    "Correo_del_Orinoco",
-    "Cracked.com",
-    "Daily_Express",
-    "Daily_Kos",
-    "Daily_Sabah",
-    "The_Daily_Wire",
-    "Discogs",
-    "Distractify",
-    "The_Electronic_Intifada",
-    "Encyclopaedia_Metallum",
-    "Ethnicity_of_Celebs",
-    "Facebook",
-    "FamilySearch",
-    "Fandom",
-    "The_Federalist",
-    "Find_a_Grave",
-    "Findmypast",
-    "Flags_of_the_World",
-    "Flickr",
-    "Forbes.com_contributors",
-    "Fox_News_(politics_and_science)",
-    "Fox_News_(talk_shows)",
-    "Gawker",
-    "GB_News",
-    "Geni.com",
-    "gnis-class",
-    "gns-class",
-    "GlobalSecurity.org",
-    "Goodreads",
-    "Guido_Fawkes",
-    "Heat_Street",
-    "History",
-    "HuffPost_contributors",
-    "IMDb",
-    "Independent_Media_Center",
-    "Inquisitr",
-    "International_Business_Times",
-    "Investopedia",
-    "Jewish_Virtual_Library",
-    "Joshua_Project",
-    "Know_Your_Meme",
-    "Land_Transport_Guru",
-    "LinkedIn",
-    "LiveJournal",
-    "Marquis_Who's_Who",
-    "Mashable_sponsored_content",
-    "MEAWW",
-    "Media_Bias/Fact_Check",
-    "Media_Research_Center",
-    "Medium",
-    "metal-experience",
-    "Metro",
-    "The_New_American",
-    "New_York_Post",
-    "NGO_Monitor",
-    "The_Onion",
-    "Our_Campaigns",
-    "PanAm_Post",
-    "Patheos",
-    "An_Phoblacht",
-    "The_Post_Millennial",
-    "arXiv",
-    "bioRxiv",
-    "medRxiv",
-    "PeerJ Preprints",
-    "Preprints.org",
-    "SSRN",
-    "PR_Newswire",
-    "Quadrant",
-    "Quillette",
-    "Quora",
-    "Raw_Story",
-    "Reddit",
-    "RedState",
-    "ResearchGate",
-    "Rolling_Stone_(politics_and_society,_2011\u2013present)",
-    "Rolling_Stone_(Culture_Council)",
-    "Scribd",
-    "Scriptural_texts",
-    "Simple_Flying",
-    "Sixth_Tone_(politics)",
-    "The_Skwawkbox",
-    "SourceWatch",
-    "Spirit_of_Metal",
-    "Sportskeeda",
-    "Stack_Exchange",
-    "Stack_Overflow",
-    "MathOverflow",
-    "Ask_Ubuntu",
-    "starsunfolded.com",
-    "Statista",
-    "TASS",
-    "The_Truth_About_Guns",
-    "TV.com",
-    "TV_Tropes",
-    "Twitter",
-    "X.com",
-    "Urban_Dictionary",
-    "Venezuelanalysis",
-    "VGChartz",
-    "VoC",
-    "Washington_Free_Beacon",
-    "Weather2Travel",
-    "The_Western_Journal",
-    "We_Got_This_Covered",
-    "WhatCulture",
-    "Who's_Who_(UK)",
-    "WhoSampled",
-    "Wikidata",
-    "WikiLeaks",
-    "Wikinews",
-    "Wikipedia",
-    "WordPress.com",
-    "Worldometer",
-    "YouTube",
-    "ZDNet",
-}
-DEPRECATED = {
-    "Al_Mayadeen",
-    "ANNA_News",
-    "Baidu_Baike",
-    "China_Global_Television_Network",
-    "The_Cradle",
-    "Crunchbase",
-    "The_Daily_Caller",
-    "Daily_Mail",
-    "Daily_Star",
-    "The_Epoch_Times",
-    "FrontPage_Magazine",
-    "The_Gateway_Pundit",
-    "Global_Times",
-    "The_Grayzone",
-    "HispanTV",
-    "Jihad_Watch",
-    "Last.fm",
-    "LifeSiteNews",
-    "The_Mail_on_Sunday",
-    "MintPress_News",
-    "National_Enquirer",
-    "New_Eastern_Outlook",
-    "News_Break",
-    "NewsBlaze",
-    "News_of_the_World",
-    "Newsmax",
-    "NNDB",
-    "Occupy_Democrats",
-    "Office_of_Cuba_Broadcasting",
-    "One_America_News_Network",
-    "Peerage_websites",
-    "Press_TV",
-    "Project_Veritas",
-    "Rate_Your_Music",
-    "Republic_TV",
-    "Royal_Central",
-    "RT",
-    "Sputnik",
-    "The_Sun",
-    "Taki's_Magazine",
-    "Tasnim_News_Agency",
-    "Telesur",
-    "The_Unz_Review",
-    "VDARE",
-    "Voltaire_Network",
-    "WorldNetDaily",
-    "Zero_Hedge",
-}
-BLACKLISTED = {
-    "Advameg",
-    "bestgore.com",
-    "Breitbart_News",
-    "Centre_for_Research_on_Globalization",
-    "Examiner.com",
-    "Famous_Birthdays",
-    "Healthline",
-    "InfoWars",
-    "Lenta.ru",
-    "LiveLeak",
-    "Lulu.com",
-    "MyLife",
-    "Natural_News",
-    "OpIndia",
-    "The_Points_Guy",
-    "The_Points_Guy_(sponsored_content)",
-    "Swarajya",
-    "Veterans_Today",
-    "ZoomInfo",
-}
+load_dotenv()
 
+@dataclass
+class SearchResult:
+    id: str
+    score: float
+    content: str
+    metadata: Dict[str, str]
 
-def is_valid_wikipedia_source(url):
-    parsed_url = urlparse(url)
-    # Check if the URL is from a reliable domain
-    combined_set = GENERALLY_UNRELIABLE | DEPRECATED | BLACKLISTED
-    for domain in combined_set:
-        if domain in parsed_url.netloc:
-            return False
-
-    return True
-
-
-class RAGRetriever(Retriever):
-    """Retriever implementation using RAG API for hybrid search"""
+class RAGRetriever:
+    """Implementation of the Retriever interface using RAG API"""
     
     def __init__(self):
-        self.base_url = "https://api.cloudindex.ai/public/v1"
-        self.session = requests.Session()
-        self.last_request_time = 0
-        self.retry_delay = 1  # initial retry delay in seconds
+        self.api_key = os.getenv('RAG_API_KEY')
+        self.base_url = os.getenv('RAG_API_URL')
         
         # Load configuration from secrets.toml
-        try:
-            import toml
-            with open("secrets.toml") as f:
-                secrets = toml.load(f)
-                self.api_key = secrets["rag"]["api_key"]
-        except Exception as e:
-            raise RuntimeError("Failed to load RAG API configuration") from e
+        self.similarity_top_k = int(os.getenv('RAG_RETRIEVER_SIMILARITY_TOP_K', 10))
+        self.alpha = float(os.getenv('RAG_RETRIEVER_ALPHA', 0.75))
+        self.reranking_enabled = os.getenv('RAG_RETRIEVER_RERANKING_ENABLED', 'true').lower() == 'true'
+        self.reranking_top_n = int(os.getenv('RAG_RETRIEVER_RERANKING_TOP_N', 5))
+        self.reranking_threshold = float(os.getenv('RAG_RETRIEVER_RERANKING_THRESHOLD', 0.7))
+        self.max_retries = int(os.getenv('RAG_RETRIEVER_MAX_RETRIES', 3))
+        self.base_delay = float(os.getenv('RAG_RETRIEVER_BASE_DELAY', 1.0))
+        
+        self.session = requests.Session()
+        self.session.headers.update({
+            'Authorization': f'ApiKey {self.api_key}',
+            'Content-Type': 'application/json'
+        })
+        
+    def retrieve(self, query: Union[str, List[str]], exclude_urls: List[str] = []) -> List[Information]:
+        """Search for relevant documents using the RAG API.
+        
+        Args:
+            query: A string or list of strings containing the search queries
+            exclude_urls: A list of URLs to exclude from the search results
             
-    def _handle_rate_limit(self, response: requests.Response):
-        """Handle rate limiting based on API response headers"""
-        if response.status_code == 429:
-            retry_after = int(response.headers.get("Retry-After", self.retry_delay))
-            time.sleep(retry_after)
-            return True
-        return False
+        Returns:
+            A list of SearchResult objects containing the matched documents
+        """
+        queries = [query] if isinstance(query, str) else query
+        all_results = []
         
-    def _make_request(self, query: str, options: dict = None):
-        """Make API request with error handling"""
-        url = f"{self.base_url}/query"
-        headers = {
-            "Authorization": f"ApiKey {self.api_key}",
-            "Content-Type": "application/json"
-        }
+        logger.info(f"RAG search initiated with {len(queries)} queries")
+        logger.debug(f"Search configuration: alpha={self.alpha}, topK={self.similarity_top_k}, "
+                    f"reranking={'enabled' if self.reranking_enabled else 'disabled'}")
         
-        payload = {
-            "query": query,
-            "options": options or {}
-        }
+        for q in queries:
+            params = {
+                'query': q,
+                'options': {
+                    'similarityTopK': self.similarity_top_k,
+                    'alpha': self.alpha,
+                    'rerankingEnabled': self.reranking_enabled,
+                    'rerankingTopN': self.reranking_top_n,
+                    'rerankingThreshold': self.reranking_threshold,
+                    'excludeUrls': exclude_urls
+                }
+            }
+            logger.debug(f"Executing RAG query: {q}")
         
-        for attempt in range(3):
-            try:
-                response = self.session.post(url, headers=headers, json=payload)
-                
-                # Handle rate limiting
-                if self._handle_rate_limit(response):
-                    continue
-                    
-                response.raise_for_status()
-                return response.json()
-                
-            except requests.exceptions.RequestException as e:
-                if attempt == 2:  # Last attempt
-                    error_data = {}
-                    try:
-                        error_data = response.json()
-                    except:
-                        pass
-                        
-                    raise RuntimeError(
-                        f"RAG API request failed: {str(e)}. "
-                        f"Error details: {error_data.get('error', 'Unknown error')}"
+            for attempt in range(self.max_retries):
+                try:
+                    response = self.session.post(
+                        f'{self.base_url}/query',
+                        json=params
                     )
-                time.sleep(self.retry_delay * (2 ** attempt))  # Exponential backoff
+                    
+                    # Handle rate limits
+                    if response.status_code == 429:
+                        retry_after = float(response.headers.get('Retry-After', self.base_delay))
+                        wait_time = retry_after * (2 ** attempt)
+                        logger.warning(f"Rate limit hit, waiting {wait_time}s before retry (attempt {attempt + 1}/{self.max_retries})")
+                        time.sleep(wait_time)
+                        continue
+                        
+                    response.raise_for_status()
+                    
+                    response_data = response.json()
+                    logger.debug(f"RAG API response received with {len(response_data.get('matches', []))} matches")
+                    
+                    results = []
+                    for match in response_data.get('matches', []):
+                        try:
+                            content = match.get('text', '')
+                            if not content:
+                                continue
+                                
+                            info = Information(
+                                url=match.get('id', ''),
+                                description="",
+                                snippets=[content],
+                                title="",
+                                meta={
+                                    "score": match.get('score', 0),
+                                    **match.get('metadata', {})
+                                }
+                            )
+                            results.append(info)
+                        except Exception as e:
+                            logger.warning(f"Error processing match: {str(e)}")
+                            continue
+                        
+                    return results
+                    
+                except requests.exceptions.RequestException as e:
+                    if attempt == self.max_retries - 1:
+                        logger.error(f"RAG API request failed after {self.max_retries} attempts: {str(e)}")
+                        raise Exception(f'API request failed after {self.max_retries} attempts: {str(e)}')
+                    logger.warning(f"RAG API request failed (attempt {attempt + 1}/{self.max_retries}): {str(e)}")
+                    time.sleep(self.base_delay * (2 ** attempt))
+        
+class PrimaryRAGRetriever(RAGRetriever):
+    """Primary implementation combining RAG and web search retrievers"""
+    
+    def __init__(self, rag_retriever: RAGRetriever, web_retriever: Retriever):
+        super().__init__()
+        self.rag_retriever = rag_retriever
+        self.web_retriever = web_retriever
+        self.priority_threshold = float(os.getenv('RAG_RETRIEVER_PRIORITY_THRESHOLD', 0.8))
+        self._usage_metrics = {
+            'total_calls': 0,
+            'successful_calls': 0,
+            'failed_calls': 0,
+            'rate_limit_events': 0,
+            'fallbacks': 0,
+            'response_times': [],
+            'result_scores': []
+        }
 
-    def retrieve(self, query: str, top_k: int = 10, alpha: float = 0.75) -> List[Information]:
-        """Retrieve relevant information using RAG API"""
-        options = {
-            "similarityTopK": top_k,
-            "alpha": alpha,
-            "rerankingEnabled": True,
-            "rerankingTopN": min(top_k, 5),
-            "rerankingThreshold": 0.7
+    def collect_and_reset_rm_usage(self) -> Dict[str, int]:
+        """Collect and reset usage metrics for the retriever.
+        
+        Returns:
+            Dictionary mapping model names to query counts
+        """
+        metrics = {
+            'rag_api': self._usage_metrics['total_calls'],
+            'web_search': self._usage_metrics['fallbacks']
         }
         
-        try:
-            # Make API request
-            response = self._make_request(query, options)
-            
-            # Process results into STORM format
-            results = []
-            for match in response.get("matches", []):
-                if not self._validate_result(match):
-                    continue
-                    
-                info = Information(
-                    content=match["content"],
-                    metadata={
-                        "source": match["metadata"]["source"],
-                        "score": match["score"],
-                        "type": match["metadata"]["type"]
-                    }
-                )
-                results.append(info)
-                
-            return results
-            
-        except Exception as e:
-            raise RuntimeError(f"Failed to retrieve information: {str(e)}")
-            
-    def _validate_result(self, result: Dict) -> bool:
-        """Validate that a result meets STORM's requirements"""
-        required_fields = ["content", "metadata", "score"]
-        required_metadata = ["source", "type"]
+        # Store performance metrics in logs
+        logger.info(f"RAG API Performance Metrics:")
+        logger.info(f"Total calls: {self._usage_metrics['total_calls']}")
+        logger.info(f"Successful calls: {self._usage_metrics['successful_calls']}")
+        logger.info(f"Failed calls: {self._usage_metrics['failed_calls']}")
+        logger.info(f"Rate limit events: {self._usage_metrics['rate_limit_events']}")
+        logger.info(f"Fallbacks: {self._usage_metrics['fallbacks']}")
         
-        # Check required fields exist
-        if not all(field in result for field in required_fields):
-            return False
+        if self._usage_metrics['response_times']:
+            avg_response_time = sum(self._usage_metrics['response_times']) / len(self._usage_metrics['response_times'])
+            logger.info(f"Average response time: {avg_response_time:.4f}s")
             
-        # Check required metadata exists
-        if not all(field in result["metadata"] for field in required_metadata):
-            return False
+        if self._usage_metrics['result_scores']:
+            avg_result_score = sum(self._usage_metrics['result_scores']) / len(self._usage_metrics['result_scores'])
+            logger.info(f"Average result score: {avg_result_score:.4f}")
+        
+        # Reset metrics
+        self._usage_metrics = {
+            'total_calls': 0,
+            'successful_calls': 0,
+            'failed_calls': 0,
+            'rate_limit_events': 0,
+            'fallbacks': 0,
+            'response_times': [],
+            'result_scores': []
+        }
+        
+        return metrics
+
+    def retrieve(self, query: Union[str, List[str]], exclude_urls: List[str] = []) -> List[Information]:
+        """Retrieve information using both RAG and web retrievers.
+        
+        Args:
+            query: A string or list of strings containing the search queries
+            exclude_urls: A list of URLs to exclude from the search results
             
-        # Validate content length
-        if len(result["content"]) < 50 or len(result["content"]) > 10000:
-            return False
+        Returns:
+            A list of Information objects containing the matched documents
+        """
+        self._usage_metrics['total_calls'] += 1
+        start_time = time.time()
+        logger.info("Starting hybrid retrieval with PrimaryRAGRetriever")
+        logger.debug(f"Priority threshold: {self.priority_threshold}")
+        
+        # First try RAG retrieval
+        try:
+            logger.debug("Attempting RAG retrieval")
+            results = self.rag_retriever.retrieve(query, exclude_urls=exclude_urls)
             
-        return True
+            if results:
+                # Convert SearchResult to Information if needed
+                if isinstance(results[0], SearchResult):
+                    top_score = results[0].score
+                    results = [Information(
+                        url=r.id,
+                        description="",
+                        snippets=[r.content],
+                        title="",
+                        meta={"score": r.score, **r.metadata}
+                    ) for r in results]
+                else:
+                    top_score = results[0].meta.get("score", 0)
+                
+                logger.info(f"RAG retrieval returned {len(results)} results with top score {top_score}")
+                
+                if top_score >= self.priority_threshold:
+                    logger.info("Using RAG results (above threshold)")
+                    self._usage_metrics['successful_calls'] += 1
+                    self._usage_metrics['result_scores'].append(top_score)
+                    self._usage_metrics['response_times'].append(time.time() - start_time)
+                    return results
+                
+                logger.info(f"RAG results below threshold ({top_score} < {self.priority_threshold}), falling back to web search")
+                self._usage_metrics['fallbacks'] += 1
+            else:
+                logger.info("RAG retrieval returned no results, falling back to web search")
+                self._usage_metrics['fallbacks'] += 1
+                
+        except Exception as e:
+            logger.warning(f"RAG retrieval failed: {str(e)}, falling back to web search")
+            self._usage_metrics['failed_calls'] += 1
+            self._usage_metrics['fallbacks'] += 1
+            
+        # Fallback to web search if RAG fails or results are below threshold
+        logger.debug("Executing web search fallback")
+        web_results = self.web_retriever.retrieve(query, exclude_urls=exclude_urls)
+        logger.info(f"Web search returned {len(web_results)} results")
+        self._usage_metrics['response_times'].append(time.time() - start_time)
+        return web_results

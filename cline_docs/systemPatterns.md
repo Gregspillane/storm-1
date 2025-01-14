@@ -1,62 +1,37 @@
 # System Patterns
 
-## Core Architecture
-- Modular design with separate components for:
-  - Knowledge curation
-  - Outline generation
-  - Article generation
-  - Article polishing
-- Interface-driven development with clear module contracts
+## RAG Retrieval Patterns
 
-## STORM Architecture
-1. Knowledge Curation Module
-   - Collects broad coverage of information
-   - Uses perspective-guided question asking
-   - Simulates writer-expert conversations
+### Hybrid Search Pattern
+- Combines dense vector search with sparse keyword search
+- Uses alpha parameter to control weighting between methods
+- Automatically falls back to keyword search if vector search fails
 
-2. Outline Generation Module
-   - Organizes collected information hierarchically
-   - Creates structured outline for article
+### Rate Limiting Pattern
+- Implements exponential backoff for rate limited requests
+- Uses Retry-After header when available
+- Logs retry attempts and wait times
 
-3. Article Generation Module
-   - Populates outline with collected information
-   - Generates citations and references
+### Fallback Pattern
+- Attempts RAG retrieval first
+- Falls back to web search if:
+  - RAG results are below confidence threshold
+  - RAG API returns no results
+  - RAG API fails with error
 
-4. Article Polishing Module
-   - Refines article presentation
-   - Adds summarization sections
-   - Removes duplicate content
+### Information Conversion Pattern
+- Converts raw API results to Information objects
+- Preserves metadata and scores
+- Handles both single and multiple queries
 
-## Co-STORM Architecture
-- Collaborative discourse protocol
-- Turn management policy
-- Dynamic mind map for shared conceptual space
-- Multiple LLM agent types:
-  - Co-STORM experts
-  - Moderator
-  - Human user
+## Error Handling Patterns
+- Graceful degradation when APIs fail
+- Comprehensive logging of errors
+- Automatic retries for transient failures
+- Fallback to alternative retrieval methods
 
-## RAG Architecture Pattern
-- Hybrid retrieval combining:
-  - Dense vector search for semantic similarity
-  - Sparse vector (BM25) search for keyword matching
-- Integration points:
-  - Knowledge curation module
-  - Existing search/retrieval infrastructure
-  - Article generation pipeline
-- Configuration requirements:
-  - API key authentication
-  - Search parameter tuning (alpha, topK, etc.)
-  - Reranking options
-- Error handling strategy:
-  - Rate limit management
-  - API error recovery
-  - Fallback to standard retrieval
-
-## Key Technical Decisions
-- Use of DSPy framework for modularity
-- Support for multiple language models
-- Flexible search/retrieval module integration
-- Separation of research and writing stages
-- Human-in-the-loop capabilities in Co-STORM
-
+## Configuration Patterns
+- Centralized configuration via environment variables
+- Sensible defaults for all parameters
+- Override options for specific use cases
+- Validation of configuration values

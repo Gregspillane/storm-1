@@ -14,6 +14,7 @@ from .modules.outline_generation import StormOutlineGenerationModule
 from .modules.persona_generator import StormPersonaGenerator
 from .modules.storm_dataclass import StormInformationTable, StormArticle
 from ..interface import Engine, LMConfigs, Retriever
+from .modules.retriever import RAGRetriever, PrimaryRAGRetriever
 from ..lm import OpenAIModel, AzureOpenAIModel
 from ..utils import FileIOHelper, makeStringRed, truncate_filename
 
@@ -179,7 +180,12 @@ class STORMWikiRunner(Engine):
         self.args = args
         self.lm_configs = lm_configs
 
-        self.retriever = Retriever(rm=rm, max_thread=self.args.max_thread_num)
+        # Initialize both RAG and web search retrievers
+        rag_retriever = RAGRetriever()
+        web_retriever = Retriever(rm=rm, max_thread=self.args.max_thread_num)
+        
+        # Create primary retriever that uses RAG with web search fallback
+        self.retriever = PrimaryRAGRetriever(rag_retriever, web_retriever)
         storm_persona_generator = StormPersonaGenerator(
             self.lm_configs.question_asker_lm
         )
