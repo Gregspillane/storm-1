@@ -1,6 +1,7 @@
-from typing import Union, List
+from typing import Union, List, Dict, Optional
 from urllib.parse import urlparse
-
+import time
+import requests
 import dspy
 
 from ...interface import Retriever, Information
@@ -231,3 +232,122 @@ def is_valid_wikipedia_source(url):
             return False
 
     return True
+
+
+class RAGRetriever(Retriever):
+    """Retriever implementation using RAG API for hybrid search"""
+    
+    def __init__(self):
+        self.base_url = "https://api.cloudindex.ai/public/v1"
+        self.session = requests.Session()
+        self.last_request_time = 0
+        self.retry_delay = 1  # initial retry delay in seconds
+        
+        # Load configuration from secrets.toml
+        try:
+            import toml
+            with open("secrets.toml") as f:
+                secrets = toml.load(f)
+                self.api_key = secrets["rag"]["api_key"]
+        except Exception as e:
+            raise RuntimeError("Failed to load RAG API configuration") from e
+            
+    def _handle_rate_limit(self, response: requests.Response):
+        """Handle rate limiting based on API response headers"""
+        if response.status_code == 429:
+            retry_after = int(response.headers.get("Retry-After", self.retry_delay))
+            time.sleep(retry_after)
+            return True
+        return False
+        
+    def _make_request(self, query: str, options: dict = None):
+        """Make API request with error handling"""
+        url = f"{self.base_url}/query"
+        headers = {
+            "Authorization": f"ApiKey {self.api_key}",
+            "Content-Type": "application/json"
+        }
+        
+        payload = {
+            "query": query,
+            "options": options or {}
+        }
+        
+        for attempt in range(3):
+            try:
+                response = self.session.post(url, headers=headers, json=payload)
+                
+                # Handle rate limiting
+                if self._handle_rate_limit(response):
+                    continue
+                    
+                response.raise_for_status()
+                return response.json()
+                
+            except requests.exceptions.RequestException as e:
+                if attempt == 2:  # Last attempt
+                    error_data = {}
+                    try:
+                        error_data = response.json()
+                    except:
+                        pass
+                        
+                    raise RuntimeError(
+                        f"RAG API request failed: {str(e)}. "
+                        f"Error details: {error_data.get('error', 'Unknown error')}"
+                    )
+                time.sleep(self.retry_delay * (2 ** attempt))  # Exponential backoff
+
+    def retrieve(self, query: str, top_k: int = 10, alpha: float = 0.75) -> List[Information]:
+        """Retrieve relevant information using RAG API"""
+        options = {
+            "similarityTopK": top_k,
+            "alpha": alpha,
+            "rerankingEnabled": True,
+            "rerankingTopN": min(top_k, 5),
+            "rerankingThreshold": 0.7
+        }
+        
+        try:
+            # Make API request
+            response = self._make_request(query, options)
+            
+            # Process results into STORM format
+            results = []
+            for match in response.get("matches", []):
+                if not self._validate_result(match):
+                    continue
+                    
+                info = Information(
+                    content=match["content"],
+                    metadata={
+                        "source": match["metadata"]["source"],
+                        "score": match["score"],
+                        "type": match["metadata"]["type"]
+                    }
+                )
+                results.append(info)
+                
+            return results
+            
+        except Exception as e:
+            raise RuntimeError(f"Failed to retrieve information: {str(e)}")
+            
+    def _validate_result(self, result: Dict) -> bool:
+        """Validate that a result meets STORM's requirements"""
+        required_fields = ["content", "metadata", "score"]
+        required_metadata = ["source", "type"]
+        
+        # Check required fields exist
+        if not all(field in result for field in required_fields):
+            return False
+            
+        # Check required metadata exists
+        if not all(field in result["metadata"] for field in required_metadata):
+            return False
+            
+        # Validate content length
+        if len(result["content"]) < 50 or len(result["content"]) > 10000:
+            return False
+            
+        return True

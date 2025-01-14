@@ -14,6 +14,11 @@ STORM is a system that generates Wikipedia-like articles from scratch using larg
 - Simulated conversation between writer and topic expert
 - Modular architecture for customization
 - Support for multiple language models and search engines
+- Enhanced retrieval capabilities through RAG integration:
+  * Hybrid search combining dense and sparse vectors
+  * Improved relevance of retrieved information
+  * Better handling of semantic queries
+  * Maintained backward compatibility with existing search modules
 
 ## Collaborative Version (Co-STORM)
 Co-STORM enhances STORM by enabling human-AI collaboration through:

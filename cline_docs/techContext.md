@@ -20,6 +20,15 @@
 - Serper API for web search
 - SerpAPI for search results
 - Vector-based retrieval modules
+- RAG API for hybrid retrieval
+  - Authentication via API key in secrets.toml
+  - Requires requests library
+  - Configuration parameters:
+    * alpha: dense/sparse search balance
+    * topK: number of results to return
+    * rerank: enable/disable result reranking
+  - Rate limit handling with exponential backoff
+  - Fallback to standard retrieval on API errors
 - Custom search engine integrations
 
 ## Key Frameworks

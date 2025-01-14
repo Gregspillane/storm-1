@@ -1,14 +1,21 @@
 # Active Context
 
 ## Current Activity
-- Helping user understand and use Co-STORM capabilities
-- Troubleshooting configuration issues
-- Explaining interactive conversation features
+- Implementing RAG integration for enhanced retrieval
+  - Designed RAGRetriever class implementing Retriever interface
+  - Implemented hybrid search combining dense and sparse vectors
+  - Added session-based API calls for efficiency
+  - Configured RAG API through secrets.toml
+- Integrating RAG with existing knowledge curation pipeline
+  - Maintaining backward compatibility with current search modules
+  - Handling RAG API rate limits with exponential backoff
+  - Optimizing retrieval performance through parameter tuning
 
 ## Recent Changes
-- Fixed secrets.toml configuration:
-  - Added proper environment variable names
-  - Added ENCODER_API_TYPE setting
+- Added RAG API configuration to secrets.toml
+- Implemented hybrid search functionality
+- Documented RAG integration patterns
+- Updated system documentation with RAG details
 - Successfully launched Co-STORM interactive session
 - Documented Co-STORM conversation workflow
 
@@ -32,10 +39,11 @@
    - Saves conversation history
 
 ## Next Steps
-1. Document common usage patterns
-2. Create example conversation scenarios
-3. Add troubleshooting section
-4. Expand configuration documentation
+1. Follow RAG implementation plan (see RAG_Implementation_Plan.md)
+2. Document common usage patterns
+3. Create example conversation scenarios
+4. Add troubleshooting section
+5. Expand configuration documentation
 
 ## Current Focus
 - Understanding Co-STORM's interactive capabilities

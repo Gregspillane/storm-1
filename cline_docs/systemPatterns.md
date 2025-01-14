@@ -36,6 +36,23 @@
   - Moderator
   - Human user
 
+## RAG Architecture Pattern
+- Hybrid retrieval combining:
+  - Dense vector search for semantic similarity
+  - Sparse vector (BM25) search for keyword matching
+- Integration points:
+  - Knowledge curation module
+  - Existing search/retrieval infrastructure
+  - Article generation pipeline
+- Configuration requirements:
+  - API key authentication
+  - Search parameter tuning (alpha, topK, etc.)
+  - Reranking options
+- Error handling strategy:
+  - Rate limit management
+  - API error recovery
+  - Fallback to standard retrieval
+
 ## Key Technical Decisions
 - Use of DSPy framework for modularity
 - Support for multiple language models
