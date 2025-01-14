@@ -43,6 +43,3 @@
 - Separation of research and writing stages
 - Human-in-the-loop capabilities in Co-STORM
 
-## Questions for User:
-1. Are there any specific architectural patterns we should document in more detail?
-2. Are there any key technical decisions that should be highlighted?
